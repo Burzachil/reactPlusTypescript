@@ -8,15 +8,23 @@ type TodoListProps = {
 }
 
 export const TodoList: React.FC<TodoListProps> = ({todos, onRemove, onToggle}) => {
+    if (!todos.length) {
+        return <p className="center" >У вас пока нет дел</p>
+    }
+
+    const removeHandler = (event: React.MouseEvent, id: number) => {
+        event.preventDefault()
+
+        onRemove(id)
+    }
+
     return (
         <ul>
             {todos.map(todo => {
-                console.log('list', todo)
                 const classes = ['todo']
                 if (todo.completed) {
                     classes.push('completed')
                 }
-                console.log(classes)
                 return (
                     <li className={classes.join(' ')} key={todo.id}>
                         <label>
@@ -28,7 +36,7 @@ export const TodoList: React.FC<TodoListProps> = ({todos, onRemove, onToggle}) =
                             <span>{todo.title}</span>
                             <i
                                 className="material-icons red-text"
-                                onClick={() => onRemove(todo.id)}
+                                onClick={event => removeHandler(event, todo.id)}
                             >
                                 delete
                             </i>
